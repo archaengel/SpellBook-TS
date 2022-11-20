@@ -1,0 +1,1 @@
+export type SpellName = string & Brand<"SpellName"> & Regex<`^[a-zA-Z]+$`>

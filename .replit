@@ -1,0 +1,11 @@
+run = ["node", "packages/core/build/esm/index.js"]
+compile = ["pnpm", "build"]
+
+[nix]
+channel = "stable-22_05"
+
+[languages.typescript]
+pattern = "**/*.ts"
+
+[languages.typescript.languageServer]
+start = ["pnpm", "exec", "tsserver", "--stdio"]
