@@ -8,10 +8,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -b tsconfig.json && ultra -r -b build-pack",
     "postinstall": "tsplus-install",
+    "start": "node packages/core/build/esm/index.js",
     "org:concurrently": "cd $INIT_CWD && concurrently",
-    "org:babel": "cd $INIT_CWD && babel"
+    "org:babel": "cd $INIT_CWD && babel",
+    "langserver": "typescript-language-server --tsserver-path node_modules/typescript/lib/tsserver.js --stdio"
   },
-  "keywords": [],
+ "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {

@@ -1,7 +1,10 @@
-export type Name = string & Brand<"Name"> & Regex<`^[a-zA-Z]+$`>;
-export const Name = Derive<Make<Name>>();
+import { Description, Spell, SpellName } from "./spells/index.js";
 
-const name = Name.make("hello")
-const name2 = Name.make("1234")
+const spell = Spell.encodeJSON({
+  name: SpellName.unsafeMake("Mage Hand"),
+  desc: Description.make(
+    Chunk("Touch something", "Don't need to be touching it")
+  ),
+});
 
-Effect.succeed(console.log(name)) > Effect.succeed(console.log(name2))
+Effect.succeed(console.log(spell));

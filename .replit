@@ -8,4 +8,4 @@ channel = "stable-22_05"
 pattern = "**/*.ts"
 
 [languages.typescript.languageServer]
-start = ["pnpm", "exec", "tsserver", "--stdio"]
+start = ["pnpm", "langserver"]
