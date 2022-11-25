@@ -71,6 +71,16 @@ export interface School {
 }
 export const School = Derive<Make<School>>()
 
+export interface DifficultyCheckType {
+    name: string;
+}
+export const DifficultyCheckType = Derive<Codec<DifficultyCheckType>>()
+export interface DifficultyCheck {
+    dc_success: string;
+    dc_type: DifficultyCheckType
+}
+export const DifficultyCheck = Derive<Codec<DifficultyCheck>>()
+
 export interface Spell {
     name: SpellName;
     desc: Description;
@@ -89,6 +99,7 @@ export interface Spell {
     classes: Classes;
     subclasses: Subclasses;
     school: School;
+    dc?: DifficultyCheck;
 }
 
 export const Spell = Derive<Codec<Spell>>();
