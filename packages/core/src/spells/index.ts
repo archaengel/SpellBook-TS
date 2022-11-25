@@ -1,15 +1,27 @@
-import { Chunk } from "@tsplus/stdlib/collections/Chunk";
+import { FetchError, Http, JsonBodyError } from "../http/index.js"
+import { Spell } from "./codec.js"
 
-export type SpellName = string &
-  Brand<"SpellName"> &
-  Regex<`^([a-zA-Z]+\s)*([a-zA-Z]+)$`>;
-export const SpellName = Derive<Make<SpellName>>();
+const apiEndpoint = 'https://www.dnd5eapi.co/api/'
 
-export type Description = Chunk<string> & Brand<"Description">;
-export const Description = Derive<Make<Description>>();
-
-export interface Spell {
-  name: SpellName;
-  desc: Description;
+export class SpellError {
+    readonly _tag = 'SpellError'
+    constructor(readonly error: unknown) {}
 }
-export const Spell = Derive<Codec<Spell>>();
+
+const spellFromJson = (json: unknown) => Spell.decode(json).mapLeft((error) => new SpellError(error))
+
+export interface SpellsService {
+    getSpell: (name: string) => Effect<never, JsonBodyError | FetchError | SpellError, Spell>
+}
+export const SpellsService = Tag<SpellsService>()
+
+const makeSpellsService = Do(($) => {
+    const http = $(Effect.service(Http))
+    const getSpellJson = (name: string) => http.get(apiEndpoint + 'spells/' + name).flatMap(http.jsonBody)
+    const getSpell = (name: string) => getSpellJson(name).flatMap(json => Effect.fromEither(spellFromJson(json)))
+    return {
+        getSpell
+    }
+})
+
+export const SpellsServiceLive = Layer.fromEffect(SpellsService)(makeSpellsService)
